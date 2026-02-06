@@ -131,7 +131,11 @@ wUnusedScriptByte:: db
 
 wMapTimeOfDay:: db
 
-	ds 3
+	ds 1
+
+wFollowerSpriteID:: db
+wFollowerPartyNum:: db
+wFollowerState:: db
 
 wPrinterConnectionOpen:: db
 wPrinterOpcode:: db
@@ -3018,7 +3022,6 @@ wPokegearFlags::
 	db
 wRadioTuningKnob:: db
 wLastDexMode:: db
-	ds 1
 wWhichRegisteredItem:: db
 wRegisteredItem:: db
 
@@ -3261,10 +3264,6 @@ wLuckyIDNumber:: dw
 wRepelEffect:: db ; If a Repel is in use, it contains the nr of steps it's still active
 wBikeStep:: dw
 wKurtApricornQuantity:: db
-
-wFollowerSpriteID:: db
-wFollowerPartyNum:: db
-wFollowerState:: db
 
 wPlayerDataEnd::
 

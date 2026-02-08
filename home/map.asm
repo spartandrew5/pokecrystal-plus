@@ -569,7 +569,10 @@ ReadObjectEvents::
 	push hl
 	call ClearObjectStructs
 	pop de
-	ld hl, wMap1Object
+	ld a, -1
+	ld [wMap1Object], a
+	ld [wFollowerMapObject], a
+	ld hl, wMapObjects + MAPOBJECT_LENGTH * 2
 	ld a, [de]
 	inc de
 	ld [wCurMapObjectEventCount], a
@@ -581,13 +584,13 @@ ReadObjectEvents::
 	ld a, [wCurMapObjectEventCount]
 	call CopyMapObjectEvents
 
-; get NUM_OBJECTS - [wCurMapObjectEventCount]
-; BUG: ReadObjectEvents overflows into wObjectMasks (see docs/bugs_and_glitches.md)
+; get NUM_OBJECTS - [wCurMapObjectEventCount] - 2
 	ld a, [wCurMapObjectEventCount]
 	ld c, a
-	ld a, NUM_OBJECTS
+	ld a, NUM_OBJECTS - 2
 	sub c
 	jr z, .skip
+	jr c, .skip
 
 	; could have done "inc hl" instead
 	ld bc, 1
@@ -634,21 +637,10 @@ CopyMapObjectEvents::
 	ret
 
 ClearObjectStructs::
-	ld hl, wObject1Struct
-	ld bc, OBJECT_LENGTH * (NUM_OBJECT_STRUCTS - 1)
+	ld hl, wObject2Struct
+	ld bc, OBJECT_LENGTH * (NUM_OBJECT_STRUCTS - 2)
 	xor a
 	call ByteFill
-
-; Just to make sure (this is rather pointless)
-	ld hl, wObject1Struct
-	ld de, OBJECT_LENGTH
-	ld c, NUM_OBJECT_STRUCTS - 1
-	xor a
-.loop
-	ld [hl], a
-	add hl, de
-	dec c
-	jr nz, .loop
 	ret
 
 GetWarpDestCoords::
@@ -1121,6 +1113,8 @@ CoordinatesEventText::
 
 CheckObjectMask::
 	ldh a, [hMapObjectIndex]
+	cp FOLLOWER
+	jr z, .follower
 	ld e, a
 	ld d, 0
 	ld hl, wObjectMasks
@@ -1128,8 +1122,14 @@ CheckObjectMask::
 	ld a, [hl]
 	ret
 
+.follower
+	ld a, [wFollowerObjectMask]
+	ret
+
 MaskObject::
 	ldh a, [hMapObjectIndex]
+	cp FOLLOWER
+	jr z, .follower
 	ld e, a
 	ld d, 0
 	ld hl, wObjectMasks
@@ -1137,13 +1137,25 @@ MaskObject::
 	ld [hl], -1 ; masked
 	ret
 
+.follower
+	ld a, -1
+	ld [wFollowerObjectMask], a
+	ret
+
 UnmaskObject::
 	ldh a, [hMapObjectIndex]
+	cp FOLLOWER
+	jr z, .follower
 	ld e, a
 	ld d, 0
 	ld hl, wObjectMasks
 	add hl, de
 	ld [hl], 0 ; unmasked
+	ret
+
+.follower
+	xor a
+	ld [wFollowerObjectMask], a
 	ret
 
 if DEF(_DEBUG)

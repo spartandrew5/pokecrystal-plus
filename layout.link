@@ -29,6 +29,7 @@ ROM0
 	"Header"
 	org $0150
 	"Home"
+	"Follower Script Home"
 ROMX $01
 	"bank1"
 ROMX $02
@@ -332,6 +333,7 @@ WRAM0
 	"Overworld Map"
 	align 4
 	"Video"
+	"Follower Data"
 WRAMX 1
 	"WRAM 1"
 	"Miscellaneous WRAM 1"

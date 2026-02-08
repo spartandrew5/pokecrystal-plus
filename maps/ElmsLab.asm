@@ -58,6 +58,7 @@ ElmsLabWalkUpToElmScript:
 	sjump .MustSayYes
 
 .ElmGetsEmail:
+if !DEF(_DEBUG)
 	writetext ElmText_Accepted
 	promptbutton
 	writetext ElmText_ResearchAmbitions
@@ -75,6 +76,7 @@ ElmsLabWalkUpToElmScript:
 	turnobject ELMSLAB_ELM, RIGHT
 	writetext ElmText_MissionFromMrPokemon
 	waitbutton
+endc
 	closetext
 	applymovement ELMSLAB_ELM, ElmsLab_ElmToDefaultPositionMovement1
 	turnobject PLAYER, UP
@@ -169,7 +171,6 @@ CyndaquilPokeBallScript:
 	writetext TakeCyndaquilText
 	yesorno
 	iffalse DidntChooseStarterScript
-	disappear ELMSLAB_POKE_BALL1
 	setevent EVENT_GOT_CYNDAQUIL_FROM_ELM
 	writetext ChoseStarterText
 	promptbutton
@@ -180,7 +181,11 @@ CyndaquilPokeBallScript:
 	waitsfx
 	promptbutton
 	givepoke CYNDAQUIL, 5, BERRY
+	moveobject FOLLOWER, 6, 3
 	closetext
+	scall AddFollowing
+	cry CYNDAQUIL
+	disappear ELMSLAB_POKE_BALL1
 	readvar VAR_FACING
 	ifequal RIGHT, ElmDirectionsScript
 	applymovement PLAYER, AfterCyndaquilMovement
@@ -199,7 +204,6 @@ TotodilePokeBallScript:
 	writetext TakeTotodileText
 	yesorno
 	iffalse DidntChooseStarterScript
-	disappear ELMSLAB_POKE_BALL2
 	setevent EVENT_GOT_TOTODILE_FROM_ELM
 	writetext ChoseStarterText
 	promptbutton
@@ -210,7 +214,11 @@ TotodilePokeBallScript:
 	waitsfx
 	promptbutton
 	givepoke TOTODILE, 5, BERRY
+	moveobject FOLLOWER, 7, 3
 	closetext
+	scall AddFollowing
+	cry TOTODILE
+	disappear ELMSLAB_POKE_BALL2
 	applymovement PLAYER, AfterTotodileMovement
 	sjump ElmDirectionsScript
 
@@ -227,7 +235,6 @@ ChikoritaPokeBallScript:
 	writetext TakeChikoritaText
 	yesorno
 	iffalse DidntChooseStarterScript
-	disappear ELMSLAB_POKE_BALL3
 	setevent EVENT_GOT_CHIKORITA_FROM_ELM
 	writetext ChoseStarterText
 	promptbutton
@@ -238,7 +245,11 @@ ChikoritaPokeBallScript:
 	waitsfx
 	promptbutton
 	givepoke CHIKORITA, 5, BERRY
+	moveobject FOLLOWER, 8, 3
 	closetext
+	scall AddFollowing
+	cry CHIKORITA
+	disappear ELMSLAB_POKE_BALL3
 	applymovement PLAYER, AfterChikoritaMovement
 	sjump ElmDirectionsScript
 
@@ -250,10 +261,13 @@ DidntChooseStarterScript:
 
 ElmDirectionsScript:
 	turnobject PLAYER, UP
+	turnobject FOLLOWER, UP
+if !DEF(_DEBUG)
 	opentext
 	writetext ElmDirectionsText1
 	waitbutton
 	closetext
+endc
 	addcellnum PHONE_ELM
 	opentext
 	writetext GotElmsNumberText
@@ -275,6 +289,13 @@ ElmDirectionsScript:
 	setevent EVENT_RIVAL_CHERRYGROVE_CITY
 	setscene SCENE_ELMSLAB_AIDE_GIVES_POTION
 	setmapscene NEW_BARK_TOWN, SCENE_NEWBARKTOWN_NOOP
+	end
+
+AddFollowing:
+	loademote EMOTE_POKE_BALL
+	appearfollower
+	callasm RefreshFollowingCoords
+	closetext
 	end
 
 ElmDescribesMrPokemonScript:
@@ -727,6 +748,7 @@ ElmText_Intro:
 	text "ELM: <PLAY_G>!"
 	line "There you are!"
 
+if !DEF(_DEBUG)
 	para "I needed to ask"
 	line "you a favor."
 
@@ -760,6 +782,7 @@ ElmText_Intro:
 
 	para "that I recently"
 	line "caught."
+endc
 	done
 
 ElmText_Accepted:
@@ -992,6 +1015,7 @@ ElmAfterTheftText4:
 ElmAfterTheftText5:
 	text "ELM: What?!?"
 
+if !DEF(_DEBUG)
 	para "PROF.OAK gave you"
 	line "a #DEX?"
 
@@ -1021,6 +1045,7 @@ ElmAfterTheftText5:
 	para "The closest GYM"
 	line "would be the one"
 	cont "in VIOLET CITY."
+endc
 	done
 
 ElmAfterTheftText6:

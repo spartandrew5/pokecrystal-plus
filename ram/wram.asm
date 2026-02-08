@@ -131,7 +131,10 @@ wUnusedScriptByte:: db
 
 wMapTimeOfDay:: db
 
-	ds 3
+	ds 1
+
+wFollowerSpriteID:: db
+wFollowerPartyNum:: db
 
 wPrinterConnectionOpen:: db
 wPrinterOpcode:: db
@@ -146,11 +149,12 @@ wLinkMode::
 	db
 
 wScriptVar:: db
+wScriptVar2:: db
 
 wPlayerNextMovement:: db
 wPlayerMovement:: db
 
-	ds 2
+	ds 1
 
 wMovementObject::
 	db
@@ -1818,6 +1822,14 @@ wHoursSince:: db
 wDaysSince:: db
 
 
+SECTION "Follower Data", WRAM0
+
+; Follower data stored outside save data range for vanilla compatibility.
+; The follower uses struct slot 1 (wObject1Struct) and map object sentinel value 16 (FOLLOWER).
+wFollowerMapObject:: ds MAPOBJECT_LENGTH ; 16 bytes
+wFollowerObjectMask:: db
+
+
 SECTION "WRAM 1", WRAMX
 
 wGBCOnlyDecompressBuffer:: ; a $540-byte buffer that continues past this SECTION
@@ -2368,7 +2380,7 @@ wSpriteFlags:: db
 
 wHandlePlayerStep:: db
 
-	ds 1
+wCurMenuMonHasItemOrMail:: db
 
 wPartyMenuActionText:: db
 
@@ -2899,7 +2911,9 @@ wStartSecond:: db
 
 wRTC:: ds 4
 
-	ds 4
+wFollowerNextMovement:: db
+
+	ds 3
 
 wDST::
 ; bit 7: dst
@@ -2916,8 +2930,7 @@ wGameTimeFrames::  db
 
 wCurDay:: db
 
-	ds 1
-
+wFollowerFlags:: db
 wObjectFollow_Leader:: db
 wObjectFollow_Follower:: db
 wCenteredObject:: db
@@ -2926,7 +2939,7 @@ wFollowMovementQueue:: ds 5
 
 wObjectStructs::
 wPlayerStruct:: object_struct wPlayer ; player is object struct 0
-; wObjectStruct1 - wObjectStruct12
+; wObjectStruct1 - wObjectStruct12 (vanilla count)
 for n, 1, NUM_OBJECT_STRUCTS
 wObject{d:n}Struct:: object_struct wObject{d:n}
 endr
@@ -2937,7 +2950,7 @@ wCmdQueue:: ds CMDQUEUE_CAPACITY * CMDQUEUE_ENTRY_SIZE
 
 wMapObjects::
 wPlayerObject:: map_object wPlayer ; player is map object 0
-; wMap1Object - wMap15Object
+; wMap1Object - wMap15Object (vanilla count)
 for n, 1, NUM_OBJECTS
 wMap{d:n}Object:: map_object wMap{d:n}
 endr
@@ -3018,7 +3031,7 @@ wPokegearFlags::
 	db
 wRadioTuningKnob:: db
 wLastDexMode:: db
-	ds 1
+wFollowerState:: db
 wWhichRegisteredItem:: db
 wRegisteredItem:: db
 

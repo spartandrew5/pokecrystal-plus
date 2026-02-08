@@ -16,36 +16,37 @@ GetSpritePalette::
 
 GetSpriteVTile::
 	push hl
+	push de
 	push bc
-	ld hl, wUsedSprites + 2
-	ld c, SPRITE_GFX_LIST_CAPACITY - 1
+	ld [hUsedSpriteIndex], a
+	farcall GetSprite
+	ld hl, wSpriteFlags
+	res 5, [hl]
+	ld a, [hObjectStructIndex]
+	cp FIRST_VRAM1_OBJECT_STRUCT
+	jr c, .continue
+	set 5, [hl]
+	sub FIRST_VRAM1_OBJECT_STRUCT
+.continue
+	add a, a
+	add a, a
 	ld b, a
-	ldh a, [hMapObjectIndex]
-	cp 0
-	jr z, .nope
-	ld a, b
-.loop
-	cp [hl]
-	jr z, .found
-	inc hl
-	inc hl
-	dec c
-	jr nz, .loop
-	ld a, [wUsedSprites + 1]
-	scf
-	jr .done
-
-.nope
-	ld a, [wUsedSprites + 1]
-	jr .done
-
-.found
-	inc hl
+	add a, b
+	add a, b
+	ld [hUsedSpriteTile], a
+	push af
+	farcall GetUsedSprite
+	pop af
+	ld b, a
 	xor a
-	ld a, [hl]
-
-.done
+	ld a, b
+	ld hl, wSpriteFlags
+	bit 5, [hl]
+	jr z, .using_vbk1
+	or $80
+.using_vbk1
 	pop bc
+	pop de
 	pop hl
 	ret
 
@@ -201,11 +202,18 @@ CheckStandingOnEntrance::
 
 GetMapObject::
 ; Return the location of map object a in bc.
+; FOLLOWER (16) redirects to wFollowerMapObject in WRAM0.
+	cp FOLLOWER
+	jr z, .follower
 	ld hl, wMapObjects
 	ld bc, MAPOBJECT_LENGTH
 	call AddNTimes
 	ld b, h
 	ld c, l
+	ret
+
+.follower
+	ld bc, wFollowerMapObject
 	ret
 
 CheckObjectVisibility::
@@ -507,7 +515,7 @@ CopySpriteMovementData::
 	push de
 	ld e, a
 	ld d, 0
-	ld hl, SpriteMovementData + SPRITEMOVEATTR_FACING
+	ld hl, SpriteMovementData + SPRITEMOVEATTR_FACING + 1
 rept NUM_SPRITEMOVEDATA_FIELDS
 	add hl, de
 endr
@@ -515,6 +523,15 @@ endr
 	ld c, l
 	pop de
 
+	ld hl, OBJECT_MOVEMENT_TYPE
+	add hl, de
+	ld a, [hl]
+	cp SPRITEMOVEDATA_FOLLOWNOTEXACT
+	jr z, .skip_facing
+	cp SPRITEMOVEDATA_FOLLOWEROBJ
+	jr z, .skip_facing
+
+	dec bc
 	ld a, [bc]
 	inc bc
 	rlca
@@ -524,17 +541,39 @@ endr
 	add hl, de
 	ld [hl], a
 
+.skip_facing
 	ld a, [bc]
 	inc bc
 	ld hl, OBJECT_ACTION
 	add hl, de
 	ld [hl], a
 
+	ld hl, OBJECT_SPRITE
+	add hl, de
+	ld a, [hl]
+	cp SPRITE_FOLLOWER
+	jr nz, .not_follower
+	ld a, [bc]
+	inc bc
+	ld hl, OBJECT_FLAGS1
+	add hl, de
+	push bc
+	ld b, a
+	ld a, [wFollowerFlags]
+	and FOLLOWER_INVISIBLE
+	or b
+	pop bc
+	ld [hl], a
+	jr .flags1_done
+
+.not_follower
 	ld a, [bc]
 	inc bc
 	ld hl, OBJECT_FLAGS1
 	add hl, de
 	ld [hl], a
+
+.flags1_done
 
 	ld a, [bc]
 	inc bc
@@ -594,11 +633,19 @@ UpdateSprites::
 	ret
 
 GetObjectStruct::
+; Return the location of object struct a in bc.
+; FOLLOWER (16) uses wObject1Struct (struct slot 1) regardless of map object index.
+	cp FOLLOWER
+	jr z, .follower
 	ld bc, OBJECT_LENGTH
 	ld hl, wObjectStructs
 	call AddNTimes
 	ld b, h
 	ld c, l
+	ret
+
+.follower
+	ld bc, wObject1Struct
 	ret
 
 DoesObjectHaveASprite::
@@ -627,4 +674,12 @@ GetSpriteDirection::
 	add hl, bc
 	ld a, [hl]
 	maskbits NUM_DIRECTIONS, 2
+	ret
+
+CheckActiveFollowerBallAnim::
+	push hl
+	push bc
+	homecall _CheckActiveFollowerBallAnim
+	pop bc
+	pop hl
 	ret

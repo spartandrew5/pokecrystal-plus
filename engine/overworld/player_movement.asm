@@ -591,7 +591,19 @@ DoPlayerMovement::
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
+if DEF(_DEBUG)
+	ldh a, [hJoyDown]
+	or ~(A_BUTTON | B_BUTTON)
+	inc a
 	ld a, [hl]
+	jr nz, .no_wtw
+	cp COLL_01
+	jr z, .no_wtw
+	ld a, COLL_LADDER
+.no_wtw
+else
+	ld a, [hl]
+endc
 	ld [wWalkingTileCollision], a
 	ret
 
@@ -633,6 +645,13 @@ ENDM
 	ld bc, wObjectStructs ; redundant
 	farcall IsNPCAtCoord
 	jr nc, .no_npc
+
+	ld hl, OBJECT_SPRITE
+	add hl, bc
+	ld a, [hl]
+	cp SPRITE_FOLLOWER
+	jr z, .no_npc
+
 	call .CheckStrengthBoulder
 	jr c, .no_bump
 

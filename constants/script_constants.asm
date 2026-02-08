@@ -1,6 +1,10 @@
 ; object constants
 DEF PLAYER      EQU  0
-DEF FOLLOWER    EQU  1
+
+; Follower uses a sentinel value equal to NUM_OBJECTS to distinguish it from regular objects.
+; The follower's map object and object struct are stored in WRAM0 overlay instead of WRAMX arrays.
+DEF FOLLOWER    EQU NUM_OBJECTS ; = 16, outside the normal range 0-15
+
 DEF LAST_TALKED EQU -2
 
 ; string buffer constants

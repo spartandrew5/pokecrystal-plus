@@ -571,6 +571,7 @@ ReadObjectEvents::
 	pop de
 	ld a, -1
 	ld [wMap1Object], a
+	ld [wFollowerMapObject], a
 	ld hl, wMapObjects + MAPOBJECT_LENGTH * 2
 	ld a, [de]
 	inc de
@@ -1112,6 +1113,8 @@ CoordinatesEventText::
 
 CheckObjectMask::
 	ldh a, [hMapObjectIndex]
+	cp FOLLOWER
+	jr z, .follower
 	ld e, a
 	ld d, 0
 	ld hl, wObjectMasks
@@ -1119,8 +1122,14 @@ CheckObjectMask::
 	ld a, [hl]
 	ret
 
+.follower
+	ld a, [wFollowerObjectMask]
+	ret
+
 MaskObject::
 	ldh a, [hMapObjectIndex]
+	cp FOLLOWER
+	jr z, .follower
 	ld e, a
 	ld d, 0
 	ld hl, wObjectMasks
@@ -1128,13 +1137,25 @@ MaskObject::
 	ld [hl], -1 ; masked
 	ret
 
+.follower
+	ld a, -1
+	ld [wFollowerObjectMask], a
+	ret
+
 UnmaskObject::
 	ldh a, [hMapObjectIndex]
+	cp FOLLOWER
+	jr z, .follower
 	ld e, a
 	ld d, 0
 	ld hl, wObjectMasks
 	add hl, de
 	ld [hl], 0 ; unmasked
+	ret
+
+.follower
+	xor a
+	ld [wFollowerObjectMask], a
 	ret
 
 if DEF(_DEBUG)

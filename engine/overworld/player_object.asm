@@ -280,7 +280,7 @@ CopyObjectStruct::
 
 .follower
 	ld hl, wObject1Struct
-	ld a, FOLLOWER
+	ld a, 1 ; actual struct slot for VTile calculation
 	ldh [hObjectStructIndex], a
 
 .done
@@ -414,7 +414,24 @@ InitializeVisibleSprites:
 	inc a
 	cp NUM_OBJECTS
 	jr nz, .loop
-	ret
+
+; Also check the follower map object (stored in WRAM0, outside the normal array).
+; This replicates the original behavior where the follower was in wMap1Object
+; and was naturally iterated by the loop above.
+	ld a, FOLLOWER
+	ldh [hMapObjectIndex], a
+	ld bc, wFollowerMapObject
+	ld hl, MAPOBJECT_SPRITE
+	add hl, bc
+	ld a, [hl]
+	and a
+	jr z, .ret
+	ld hl, MAPOBJECT_OBJECT_STRUCT_ID
+	add hl, bc
+	ld a, [hl]
+	cp -1
+	jr nz, .ret
+	call CopyObjectStruct
 
 .ret
 	ret

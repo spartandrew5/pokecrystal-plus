@@ -219,7 +219,14 @@ MACRO skyfall_top
 	db movement_skyfall_top
 ENDM
 
-	const movement_jump_in_place ; $5a
+	const movement_bike_step ; $5a
+MACRO bike_step
+	db movement_bike_step + \1
+ENDM
+
+	const_skip 3
+
+	const movement_jump_in_place ; $5e
 MACRO jump_in_place
 	db movement_jump_in_place
 ENDM

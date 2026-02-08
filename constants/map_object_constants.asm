@@ -35,7 +35,7 @@ DEF OBJECT_JUMP_HEIGHT      rb ; 1f
 DEF OBJECT_RANGE            rb ; 20
                             rb_skip 7
 DEF OBJECT_LENGTH EQU _RS
-DEF NUM_OBJECT_STRUCTS EQU 14 ; see wObjectStructs
+DEF NUM_OBJECT_STRUCTS EQU 13 ; see wObjectStructs (reverted to vanilla for save compatibility)
 DEF FIRST_VRAM1_OBJECT_STRUCT EQU 10
 
 ; object_struct OBJECT_DIRECTION values
@@ -98,7 +98,7 @@ DEF MAPOBJECT_SCRIPT_POINTER   rw ; a
 DEF MAPOBJECT_EVENT_FLAG       rw ; c
                                rb_skip 2
 DEF MAPOBJECT_LENGTH EQU _RS
-DEF NUM_OBJECTS EQU 17
+DEF NUM_OBJECTS EQU 16 ; reverted to vanilla for save compatibility
 DEF PLAYER_OBJECT EQU 0
 
 DEF MAPOBJECT_PALETTE_MASK EQU %11110000

@@ -74,6 +74,11 @@ EnterMap:
 	xor a
 	ld [wXYComparePointer], a
 	ld [wXYComparePointer + 1], a
+; On CONTINUE, neither SpawnPlayer nor ReadObjectEvents runs,
+; so wFollowerMapObject could be uninitialized. Mark it as
+; unoccupied so RefreshFollowingCoords safely returns early.
+	ld a, -1
+	ld [wFollowerMapObject], a
 	call SetUpFiveStepWildEncounterCooldown
 	farcall RunMapSetupScript
 	call DisableEvents

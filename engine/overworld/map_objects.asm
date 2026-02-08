@@ -3599,4 +3599,3 @@ InitSprites:
 	dw wObject10Struct
 	dw wObject11Struct
 	dw wObject12Struct
-	dw wObject13Struct

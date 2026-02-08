@@ -1822,6 +1822,14 @@ wHoursSince:: db
 wDaysSince:: db
 
 
+SECTION "Follower Data", WRAM0
+
+; Follower data stored outside save data range for vanilla compatibility.
+; The follower uses struct slot 1 (wObject1Struct) and map object sentinel value 16 (FOLLOWER).
+wFollowerMapObject:: ds MAPOBJECT_LENGTH ; 16 bytes
+wFollowerObjectMask:: db
+
+
 SECTION "WRAM 1", WRAMX
 
 wGBCOnlyDecompressBuffer:: ; a $540-byte buffer that continues past this SECTION
@@ -2931,16 +2939,18 @@ wFollowMovementQueue:: ds 5
 
 wObjectStructs::
 wPlayerStruct:: object_struct wPlayer ; player is object struct 0
-; wObjectStruct1 - wObjectStruct12
+; wObjectStruct1 - wObjectStruct12 (vanilla count)
 for n, 1, NUM_OBJECT_STRUCTS
 wObject{d:n}Struct:: object_struct wObject{d:n}
 endr
 
 wCmdQueue:: ds CMDQUEUE_CAPACITY * CMDQUEUE_ENTRY_SIZE
 
+	ds 40
+
 wMapObjects::
 wPlayerObject:: map_object wPlayer ; player is map object 0
-; wMap1Object - wMap15Object
+; wMap1Object - wMap15Object (vanilla count)
 for n, 1, NUM_OBJECTS
 wMap{d:n}Object:: map_object wMap{d:n}
 endr
@@ -3034,6 +3044,8 @@ wTradeFlags:: flag_array NUM_NPC_TRADES
 wMooMooBerries:: db
 wUndergroundSwitchPositions:: db
 wFarfetchdPosition:: db
+
+	ds 13
 
 ; map scene ids
 wPokecenter2FSceneID::                            db

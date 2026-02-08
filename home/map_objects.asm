@@ -202,11 +202,18 @@ CheckStandingOnEntrance::
 
 GetMapObject::
 ; Return the location of map object a in bc.
+; FOLLOWER (16) redirects to wFollowerMapObject in WRAM0.
+	cp FOLLOWER
+	jr z, .follower
 	ld hl, wMapObjects
 	ld bc, MAPOBJECT_LENGTH
 	call AddNTimes
 	ld b, h
 	ld c, l
+	ret
+
+.follower
+	ld bc, wFollowerMapObject
 	ret
 
 CheckObjectVisibility::
@@ -626,11 +633,19 @@ UpdateSprites::
 	ret
 
 GetObjectStruct::
+; Return the location of object struct a in bc.
+; FOLLOWER (16) uses wObject1Struct (struct slot 1) regardless of map object index.
+	cp FOLLOWER
+	jr z, .follower
 	ld bc, OBJECT_LENGTH
 	ld hl, wObjectStructs
 	call AddNTimes
 	ld b, h
 	ld c, l
+	ret
+
+.follower
+	ld bc, wObject1Struct
 	ret
 
 DoesObjectHaveASprite::

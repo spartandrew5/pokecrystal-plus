@@ -3111,6 +3111,9 @@ TryUnfreezeFollower:
 	ret
 
 _UnfreezeFollowerObject::
+; Also unfreeze the follower Pokemon (separate from the NPC-follow system).
+; TryUnfreezeFollower checks FOLLOWER_FROZEN_F and movement type before unfreezing.
+	call TryUnfreezeFollower
 	ld a, [wObjectFollow_Leader]
 	cp -1
 	ret z

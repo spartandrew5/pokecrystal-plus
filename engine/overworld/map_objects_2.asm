@@ -3,6 +3,9 @@ LoadObjectMasks:
 	xor a
 	ld bc, NUM_OBJECTS
 	call ByteFill
+; Also clear the follower object mask (stored separately in WRAM0).
+	xor a
+	ld [wFollowerObjectMask], a
 	nop
 	ld bc, wMapObjects
 	ld de, wObjectMasks

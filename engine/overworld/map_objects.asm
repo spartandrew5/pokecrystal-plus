@@ -883,11 +883,15 @@ MovementFunction_FollowerObj:
 	jp hl
 
 .step_functions
-	dbw FOLLOWERMOVE_NORMAL,   NormalStep ; FOLLOWERMOVE_NORMAL
+	dbw FOLLOWERMOVE_NORMAL,   .NormalStep ; FOLLOWERMOVE_NORMAL
 	dbw FOLLOWERMOVE_NORMAL,   SlideStep  ; FOLLOWERMOVE_SLIDE
 	dbw FOLLOWERMOVE_NORMAL,   .BigStep   ; FOLLOWERMOVE_BIG_STEP
 	dbw FOLLOWERMOVE_STILL,    .TurnHead  ; FOLLOWERMOVE_STILL
 	dbw FOLLOWERMOVE_BIG_STEP, .TurnHead  ; FOLLOWERMOVE_PREPARE_JUMP
+
+.NormalStep
+	ld d, OBJECT_ACTION_STEP
+	jp NormalStep
 
 .BigStep
 ; need to modify the speed parameter
@@ -924,7 +928,10 @@ MovementFunction_FollowerObj:
 
 MovementFunction_FollowNotExact:
 	call MoveFollowNotExact
-	jp c, NormalStep
+	jr nc, .standing
+	ld d, OBJECT_ACTION_STEP
+	jp NormalStep
+.standing
 	ret
 
 MoveFollowNotExact:
@@ -3133,9 +3140,6 @@ TryUnfreezeFollower:
 	ret
 
 _UnfreezeFollowerObject::
-; Also unfreeze the follower Pokemon (separate from the NPC-follow system).
-; TryUnfreezeFollower checks FOLLOWER_FROZEN_F and movement type before unfreezing.
-	call TryUnfreezeFollower
 	ld a, [wObjectFollow_Leader]
 	cp -1
 	ret z
@@ -3514,7 +3518,7 @@ InitSprites:
 	ld hl, OBJECT_SPRITE_X_OFFSET
 	add hl, bc
 	add [hl]
-	add OAM_X_OFS
+	add 8
 	ld e, a
 	ld a, [wPlayerBGMapOffsetX]
 	add e
@@ -3525,7 +3529,7 @@ InitSprites:
 	ld hl, OBJECT_SPRITE_Y_OFFSET
 	add hl, bc
 	add [hl]
-	add OAM_Y_OFS - 4
+	add 12
 	ld e, a
 	ld a, [wPlayerBGMapOffsetY]
 	add e

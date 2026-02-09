@@ -510,3 +510,29 @@ CountTMsHMs:
 	ld a, b
 	ld [wTempTMHM], a
 	ret
+
+AppendTMHMMoveName::
+; a = item ID
+	ld a, [wNamedObjectIndex]
+	cp TM01
+	ret c
+; save item name buffer
+	push de
+; a = TM/HM number
+	ld c, a
+	farcall GetTMHMNumber
+	ld a, c
+; a = move ID
+	ld [wTempTMHM], a
+	predef GetTMHMMove
+	ld a, [wTempTMHM]
+; wStringBuffer1 = move name
+	ld [wNamedObjectIndex], a
+	call GetMoveName
+; hl = item name buffer
+	pop hl
+; append wStringBuffer1 to item name buffer
+	ld [hl], CHARVAL(" ")
+	inc hl
+	ld de, wStringBuffer1
+	jp CopyName2

@@ -856,7 +856,7 @@ CountStep:
 	jr c, .doscript
 
 	; If Repel wore off, don't count the step.
-	call DoRepelStep
+	farcall DoRepelStep
 	jr c, .doscript
 
 	; Count the step for poison and total steps
@@ -913,29 +913,6 @@ CountStep:
 
 .whiteout ; unreferenced
 	ld a, PLAYEREVENT_WHITEOUT
-	scf
-	ret
-
-DoRepelStep:
-	ld a, [wRepelEffect]
-	and a
-	ret z
-
-	dec a
-	ld [wRepelEffect], a
-	ret nz
-
-	ld a, [wRepelType]
-	ld [wCurItem], a
-	ld hl, wNumItems
-	call CheckItem
-	ld a, BANK(RepelWoreOffScript)
-	ld hl, RepelWoreOffScript
-	jr nc, .got_script
-	ld a, BANK(UseAnotherRepelScript)
-	ld hl, UseAnotherRepelScript
-.got_script
-	call CallScript
 	scf
 	ret
 

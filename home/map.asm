@@ -569,6 +569,14 @@ ReadObjectEvents::
 	push hl
 	call ClearObjectStructs
 	pop de
+; Clear wMap1Object completely. It's no longer used for the follower
+; (moved to wFollowerMapObject in WRAM0), but InitializeVisibleSprites
+; and CheckObjectEnteringVisibleRange still iterate over it.
+; Without this, stale sprite data causes phantom objects to spawn.
+	ld hl, wMap1Object
+	ld bc, MAPOBJECT_LENGTH
+	xor a
+	call ByteFill
 	ld a, -1
 	ld [wMap1Object], a
 	ld [wFollowerMapObject], a

@@ -3223,7 +3223,7 @@ _SaveFollowerCoords::
 	ld c, [hl]
 	ld b, a
 	; b = X coord, c = Y coord
-	ld hl, wMap1ObjectYCoord
+	ld hl, wFollowerMapObject + MAPOBJECT_Y_COORD
 	ld [hl], c
 	inc hl
 	ld [hl], b

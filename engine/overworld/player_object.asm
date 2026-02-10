@@ -24,11 +24,14 @@ SpawnPlayer:
 	ld hl, PlayerObjectTemplate
 	call CopyPlayerObjectTemplate
 
-	call CheckFollowerLoaded
-	jr c, .skip_follower
+; Always set up the follower map object template so
+; appearfollower has valid data to work with.
 	ld a, FOLLOWER
 	ld hl, FollowObjTemplate
 	call CopyPlayerObjectTemplate
+
+	call CheckFollowerLoaded
+	jr c, .skip_follower
 	ld b, FOLLOWER
 	call PlayerSpawn_ConvertCoords
 	xor a
@@ -80,23 +83,15 @@ _FollowerScript:
 POPS
 
 CheckFollowerLoaded:
-	xor a
-	ret
-	ld hl, wObjectStructs + 1
-	ld bc, MAPOBJECT_LENGTH
-	ld d, NUM_OBJECT_STRUCTS
-.loop
-	ld a, [hl]
-	add hl, bc
-	cp FOLLOWER
-	jr z, .loaded
-	dec d
-	jr nz, .loop
-	xor a
+; Returns carry if the follower should NOT be spawned.
+	ld a, [wPartyCount]
+	and a
+	jr nz, .has_pokemon
+	scf ; no Pokémon in party, skip follower
 	ret
 
-.loaded
-	scf
+.has_pokemon
+	xor a ; clear carry, spawn follower
 	ret
 
 CopyDECoordsToMapObject::
@@ -418,6 +413,9 @@ InitializeVisibleSprites:
 ; Also check the follower map object (stored in WRAM0, outside the normal array).
 ; This replicates the original behavior where the follower was in wMap1Object
 ; and was naturally iterated by the loop above.
+	ld a, [wPartyCount]
+	and a
+	jr z, .ret ; no Pokémon, don't load follower sprite
 	ld a, FOLLOWER
 	ldh [hMapObjectIndex], a
 	ld bc, wFollowerMapObject

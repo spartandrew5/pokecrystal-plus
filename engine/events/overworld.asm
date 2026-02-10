@@ -1617,6 +1617,39 @@ UnusedNothingHereText: ; unreferenced
 	text_far _UnusedNothingHereText
 	text_end
 
+PocketPCFunction:
+	call .LoadPocketPC
+	and $7f
+	ld [wFieldMoveSucceeded], a
+	ret
+
+.LoadPocketPC:
+	ld a, [wPlayerState]
+	ld hl, Script_LoadPocketPC
+	ld de, Script_LoadPocketPC_Register
+	call .CheckIfRegistered
+	call QueueScript
+	ld a, TRUE
+	ret
+
+.CheckIfRegistered:
+	ld a, [wUsingItemWithSelect]
+	and a
+	ret z
+	ld h, d
+	ld l, e
+	ret
+
+Script_LoadPocketPC:
+	refreshmap
+	special UpdateTimePals
+Script_LoadPocketPC_Register:
+	opentext
+	special PokemonCenterPC
+	closetext
+	refreshmap
+	end
+
 BikeFunction:
 	call .TryBike
 	and JUMPTABLE_INDEX_MASK

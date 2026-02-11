@@ -1698,6 +1698,7 @@ JynxEvosAttacks:
 	db 0 ; no more level-up moves
 
 ElectabuzzEvosAttacks:
+	db EVOLVE_TRADE, THUNDERSTONE, ELECTIVIRE
 	db 0 ; no more evolutions
 	db 1, QUICK_ATTACK
 	db 1, LEER
@@ -1711,6 +1712,7 @@ ElectabuzzEvosAttacks:
 	db 0 ; no more level-up moves
 
 MagmarEvosAttacks:
+	db EVOLVE_TRADE, FIRE_STONE, MAGMORTAR
 	db 0 ; no more evolutions
 	db 1, EMBER
 	db 1, LEER
@@ -3354,4 +3356,35 @@ CelebiEvosAttacks:
 	db 30, FUTURE_SIGHT
 	db 40, BATON_PASS
 	db 50, PERISH_SONG
+	db 0 ; no more level-up moves
+
+ElectivireEvosAttacks:
+	db 0 ; no more evolutions
+	db 1, QUICK_ATTACK
+	db 1, LEER
+	db 1, THUNDERPUNCH
+	db 1, FIRE_PUNCH
+	db 9, THUNDERPUNCH
+	db 17, LIGHT_SCREEN
+	db 25, SWIFT
+	db 36, SCREECH
+	db 42, THUNDERBOLT
+	db 52, THUNDER
+	db 0 ; no more level-up moves
+
+MagmortarEvosAttacks:
+	db 0 ; no more evolutions
+	db 1, EMBER
+	db 1, LEER
+	db 1, SMOG
+	db 1, FIRE_PUNCH
+	db 7, LEER
+	db 13, SMOG
+	db 19, FIRE_PUNCH
+	db 25, SMOKESCREEN
+	db 33, SUNNY_DAY
+	db 36, THUNDERPUNCH
+	db 42, FLAMETHROWER
+	db 49, CONFUSE_RAY
+	db 57, FIRE_BLAST
 	db 0 ; no more level-up moves

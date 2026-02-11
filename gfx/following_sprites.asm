@@ -271,6 +271,8 @@ TyranitarFollowingSprite:: INCBIN "gfx/following/tyranitar.2bpp.lz"
 LugiaFollowingSprite::     INCBIN "gfx/following/lugia.2bpp.lz"
 Ho_ohFollowingSprite::     INCBIN "gfx/following/ho_oh.2bpp.lz"
 CelebiFollowingSprite::    INCBIN "gfx/following/celebi.2bpp.lz"
+ElectivireFollowingSprite:: INCBIN "gfx/following/electivire.2bpp.lz"
+MagmortarFollowingSprite:: INCBIN "gfx/following/magmortar.2bpp.lz"
 
 
 SECTION "MiscSprites", ROMX

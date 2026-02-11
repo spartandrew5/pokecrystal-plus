@@ -53,6 +53,7 @@ AlphabeticalPokedexOrder:
 	db EEVEE
 	db EKANS
 	db ELECTABUZZ
+	db ELECTIVIRE
 	db ELECTRODE
 	db ELEKID
 	db ENTEI
@@ -122,6 +123,7 @@ AlphabeticalPokedexOrder:
 	db MAGCARGO
 	db MAGIKARP
 	db MAGMAR
+	db MAGMORTAR
 	db MAGNEMITE
 	db MAGNETON
 	db MANKEY

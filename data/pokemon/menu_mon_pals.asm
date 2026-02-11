@@ -268,7 +268,8 @@ MenuMonPals::
 	menu_mon_pals BLUE,   TEAL   ; LUGIA
 	menu_mon_pals RED,    BROWN  ; HO_OH
 	menu_mon_pals GREEN,  PINK   ; CELEBI
+	menu_mon_pals BROWN,  GRAY   ; ELECTIVIRE
+	menu_mon_pals RED,    BROWN  ; MAGMORTAR
 	assert_table_length NUM_POKEMON
-	menu_mon_pals RED,    RED    ; unused
 	menu_mon_pals RED,    BLUE   ; EGG
 	assert_table_length EGG

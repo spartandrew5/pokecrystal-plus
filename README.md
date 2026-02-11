@@ -1,3 +1,58 @@
+# Pokémon Crystal Plus
+
+This is a fork of the [Pokémon Crystal disassembly](https://github.com/pret/pokecrystal) at [PRET](https://github.com/pret).
+
+This fork adds new features while maintaining compatibility with the base game. It doesn't modify core save data structures unnecessarily.
+
+## Branches
+
+There are several branches, each with different features:
+
+**qol-features** branch:
+* Running shoes with updated sprites
+* Updated surf sprites
+* Reuse Repel
+* Infinite text speed option
+* Infinite TMs + TM names in menu
+* Trade back NPC in Elm's lab
+* Trainer card shows all 16 badges in color
+* Celebi event resotred after beating E4
+* Allow fishing while surfing
+* Pocket PC as Key Item
+* Unique colors for thrown Pokeballs
+* 60 FPS overworld
+
+
+**following-pokemon** branch:
+* All Pokemon now follow behind player
+* Updated NPC Overworld Pokemon sprites, replacing generic
+* Updated Party Menu Icons, replacing generic
+* Vanilla Crystal otherwise
+
+**master** branch:
+* Combination of above branches
+* Also added Electivire and Magmortar as held-item trade evolutions, just for fun.
+* Electirizer and Magmarizer are found in Team Rocket Base B3F and Mount Mortar B1F respectively
+
+
+
+
+## Planned Features
+* Difficulty selection.
+* Add ability to get all 251 mons.
+
+## Known Bugs
+* I haven't found any yet but I am sure there are plenty.
+
+## Credits
+* Following Pokemon branch came directly from Fellowship of the ROMs fork of pokecrystal [Pokémon Crystal](https://github.com/fellowship-of-the-roms/pokecrystal) - Modified slightly to ensure vanilla save compatability. 
+* MegamanOmega and [Pokémon Crystal Clear](https://shockslayer.com/crystal-clear/) - Following Pokemon sprites.
+* [Pokémon Polished Crystal](hhttps://github.com/Rangi42/polishedcrystal) - Another great Crystal Hack and sorce of Electivire and Magmortar sprites.
+* [pokecrystal Wiki](https://github.com/pret/pokecrystal/wiki/Tutorials) - Many great tutorials.
+
+Tried to make sure I also gave credit in commits when possible, but if I missed anyone, please feel free to reach out!
+
+
 # Pokémon Crystal [![Build Status][ci-badge]][ci]
 
 This is a disassembly of Pokémon Crystal.

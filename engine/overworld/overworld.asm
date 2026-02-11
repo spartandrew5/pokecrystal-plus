@@ -459,6 +459,158 @@ AddSpriteGFX:
 	and a
 	ret
 
+LoadSpriteGFX:
+	ld hl, wUsedSprites
+	ld b, SPRITE_GFX_LIST_CAPACITY
+.loop
+	ld a, [hli]
+	and a
+	jr z, .done
+	push hl
+	call .LoadSprite
+	pop hl
+	ld [hli], a
+	dec b
+	jr nz, .loop
+
+.done
+	ret
+
+.LoadSprite:
+	push bc
+	call GetSprite
+	pop bc
+	ld a, l
+	ret
+
+SortUsedSprites:
+; Bubble-sort sprites by type.
+
+; Run backwards through wUsedSprites to find the last one.
+
+	ld c, SPRITE_GFX_LIST_CAPACITY
+	ld de, wUsedSprites + (SPRITE_GFX_LIST_CAPACITY - 1) * 2
+.FindLastSprite:
+	ld a, [de]
+	and a
+	jr nz, .FoundLastSprite
+	dec de
+	dec de
+	dec c
+	jr nz, .FindLastSprite
+.FoundLastSprite:
+	dec c
+	jr z, .quit
+
+; If the length of the current sprite is
+; higher than a later one, swap them.
+
+	inc de
+	ld hl, wUsedSprites + 1
+
+.CheckSprite:
+	push bc
+	push de
+	push hl
+
+.CheckFollowing:
+	ld a, [de]
+	cp [hl]
+	jr nc, .loop
+
+; Swap the two sprites.
+
+	ld b, a
+	ld a, [hl]
+	ld [hl], b
+	ld [de], a
+	dec de
+	dec hl
+	ld a, [de]
+	ld b, a
+	ld a, [hl]
+	ld [hl], b
+	ld [de], a
+	inc de
+	inc hl
+
+; Keep doing this until everything's in order.
+
+.loop
+	dec de
+	dec de
+	dec c
+	jr nz, .CheckFollowing
+
+	pop hl
+	inc hl
+	inc hl
+	pop de
+	pop bc
+	dec c
+	jr nz, .CheckSprite
+
+.quit
+	ret
+
+ArrangeUsedSprites:
+; Get the length of each sprite and space them out in VRAM.
+; Crystal introduces a second table in VRAM bank 0.
+
+	ld hl, wUsedSprites
+	ld c, SPRITE_GFX_LIST_CAPACITY
+	ld b, 0
+.FirstTableLength:
+; Keep going until the end of the list.
+	ld a, [hli]
+	and a
+	jr z, .quit
+
+	ld a, [hl]
+	call GetSpriteLength
+
+; Spill over into the second table after $80 tiles.
+	add b
+	cp $80
+	jr z, .loop
+	jr nc, .SecondTable
+
+.loop
+	ld [hl], b
+	inc hl
+	ld b, a
+
+; Assumes the next table will be reached before c hits 0.
+	dec c
+	jr nz, .FirstTableLength
+
+.SecondTable:
+; The second tile table starts at tile $80.
+	ld b, $80
+	dec hl
+.SecondTableLength:
+; Keep going until the end of the list.
+	ld a, [hli]
+	and a
+	jr z, .quit
+
+	ld a, [hl]
+	call GetSpriteLength
+
+; There are only two tables, so don't go any further than that.
+	add b
+	jr c, .quit
+
+	ld [hl], b
+	ld b, a
+	inc hl
+
+	dec c
+	jr nz, .SecondTableLength
+
+.quit
+	ret
+
 GetSpriteLength:
 ; Return the length of sprite type a in tiles.
 

@@ -346,7 +346,7 @@ HideFollowerIfNPCBump:
 	ldh a, [hMapObjectIndex]
 	cp PLAYER
 	ret z
-	cp FOLLOWER
+	cp FOLLOWER_OBJ_INDEX
 	ret z
 	push hl
 	push bc
@@ -372,7 +372,7 @@ UpdateFollowerSprite:
 	ld e, a
 	ldh a, [hMapObjectIndex]
 	call CheckFollowerInvisOneStep
-	cp FOLLOWER
+	cp FOLLOWER_OBJ_INDEX
 	ld a, e
 	ret nz
 	ld hl, OBJECT_TILE_COLLISION
@@ -429,7 +429,7 @@ CheckFollowerInvisOneStep:
 ;	pop de
 ;	pop bc
 ;	pop hl
-	ret c
+	and a ; clear carry (was ret c for commented-out check above)
 	res FOLLOWER_INVISIBLE_ONE_STEP_F, [hl]
 	bit FOLLOWER_IN_POKEBALL_F, [hl]
 	push bc

@@ -4,6 +4,9 @@ DEF PLAYER      EQU  0
 ; Follower uses a sentinel value equal to NUM_OBJECTS to distinguish it from regular objects.
 ; The follower's map object and object struct are stored in WRAM0 overlay instead of WRAMX arrays.
 DEF FOLLOWER    EQU NUM_OBJECTS ; = 16, outside the normal range 0-15
+; The follower always uses object struct slot 1 (wObject1Struct).
+; Use this for comparisons with hMapObjectIndex in the step/movement loop.
+DEF FOLLOWER_OBJ_INDEX EQU 1
 
 DEF LAST_TALKED EQU -2
 

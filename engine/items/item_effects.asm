@@ -189,12 +189,12 @@ ItemEffects:
 	dw RestoreHPEffect     ; BERRY
 	dw RestoreHPEffect     ; GOLD_BERRY
 	dw SquirtbottleEffect  ; SQUIRTBOTTLE
-	dw NoEffect            ; ITEM_B0
+	dw NoEffect            ; ELECTIRIZER
 	dw PokeBallEffect      ; PARK_BALL
 	dw NoEffect            ; RAINBOW_WING
-	dw NoEffect            ; ITEM_B3
-	assert_table_length ITEM_B3
-; The items past ITEM_B3 do not have effect entries:
+	dw NoEffect            ; MAGMARIZER
+	assert_table_length MAGMARIZER
+; The items past MAGMARIZER do not have effect entries:
 ;	BRICK_PIECE
 ;	SURF_MAIL
 ;	LITEBLUEMAIL

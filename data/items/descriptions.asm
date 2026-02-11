@@ -176,10 +176,10 @@ ItemDescriptions:
 	dw BerryDesc
 	dw GoldBerryDesc
 	dw SquirtBottleDesc
-	dw TeruSama23Desc
+	dw ElectirizerDesc
 	dw ParkBallDesc
 	dw RainbowWingDesc
-	dw TeruSama24Desc
+	dw MagmarizerDesc
 	dw BrickPieceDesc
 	dw SurfMailDesc
 	dw LiteBlueMailDesc
@@ -932,8 +932,9 @@ SquirtBottleDesc:
 	db   "A bottle used for"
 	next "watering plants.@"
 
-TeruSama23Desc:
-	db   "?@"
+ElectirizerDesc:
+	db   "A box producing"
+	next "electric energy.@"
 
 ParkBallDesc:
 	db   "The Bug-Catching"
@@ -943,8 +944,9 @@ RainbowWingDesc:
 	db   "A mystical feather"
 	next "of rainbow colors.@"
 
-TeruSama24Desc:
-	db   "?@"
+MagmarizerDesc:
+	db   "A box producing"
+	next "magma energy.@"
 
 BrickPieceDesc:
 	db   "A rare chunk of"

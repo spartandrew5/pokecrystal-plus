@@ -34,8 +34,9 @@ There are several branches, each with different features:
 * Also added Electivire and Magmortar as held-item trade evolutions, just for fun.
 * Electirizer and Magmarizer are found in Team Rocket Base B3F and Mount Mortar B1F respectively
 
+<img src="https://github.com/user-attachments/assets/bdeb5d00-a2d9-4c3d-b448-ef061b11289d" width="400" height="790">
 
-
+<img src="https://github.com/user-attachments/assets/5a23fed0-7263-4ac4-8081-9201cc157fa0" width="400" height="790">
 
 ## Planned Features
 * Difficulty selection.

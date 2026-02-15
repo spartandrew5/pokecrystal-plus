@@ -252,7 +252,6 @@ FollowingSpritePointers::
 	dba CelebiFollowingSprite
 	dba ElectivireFollowingSprite
 	dba MagmortarFollowingSprite
-	db 0, 0, 0
 	dba EggFollowingSprite
 
 UnownFollowingSpritePointers::
